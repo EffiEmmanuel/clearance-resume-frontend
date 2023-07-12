@@ -1,13 +1,51 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/font/Poppins/Poppins-Light.ttf");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/font/Poppins/Poppins-Regular.ttf");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/font/Poppins/Poppins-Medium.ttf");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/font/Poppins/Poppins-SemiBold.ttf");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/font/Poppins/Poppins-Bold.ttf");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/font/Poppins/Poppins-ExtraBold.ttf");
+  font-weight: 800;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  font-family: "Poppins";
+  font-size: 0.95rem;
+}
+
+.shadow-top-right {
+  box-shadow: 4px -4px 4px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 4px -4px 4px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 4px -4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.shadow-bottom-left {
+  box-shadow: -4px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: -4px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: -4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
