@@ -1,14 +1,29 @@
+// @ts-nocheck
 import axios from "axios";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import LoginFormSchema from "./validation";
 import { useFormik } from "formik";
+import { MdLock, MdLockOutline, MdMailOutline } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
+import { FaSpinner } from "react-icons/fa";
+// GOOGLE OAUTH
+import { gapi } from "gapi-script";
+import jwt_decode from "jwt-decode";
+import LoginWithGoogleButton from "../../components/security/OAuth/LoginWithGoogleButton";
+
+// FACEBOOK OAUTH
+import { LoginSocialFacebook } from "reactjs-social-login";
+import { FacebookLoginButton } from "react-social-login-buttons";
 
 // Logos
 import facebookLogo from "../../assets/logos/facebookLogo.svg";
 import linkedinLogo from "../../assets/logos/linkedinLogo.svg";
 import googleLogo from "../../assets/logos/googleLogo.svg";
-import { MdLock, MdLockOutline, MdMailOutline } from "react-icons/md";
+import LoginWithFacebookButton from "../../components/security/OAuth/LoginWithFacebookButton";
 
 function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,12 +36,24 @@ function LoginForm() {
     setIsLoading(true);
     // TO-DO: Send API request to server
     await axios
-      .post("", {
+      .post(`http://localhost:8080/api/v1/users/login`, {
         email: values.email,
         password: values.password,
       })
-      .then((res) => {})
-      .catch((err) => {});
+      .then((res) => {
+        console.log("LOGIN RESPONSE:", res.data);
+        localStorage.setItem("token", JSON.stringify(res.data?.token));
+        localStorage.setItem("user", JSON.stringify(res.data?.user?.user));
+
+        toast.success(res.data?.message);
+        setIsLoading(false);
+        Router("/dashboard");
+      })
+      .catch((err) => {
+        console.log("LOGIN ERROR:", err);
+        toast.error(err?.response?.data?.message);
+        setIsLoading(false);
+      });
   };
 
   const { values, errors, handleChange, handleSubmit } = useFormik({
@@ -38,41 +65,207 @@ function LoginForm() {
     onSubmit,
   });
 
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  async function handleCallBackResponse(response) {
+    const userObject = jwt_decode(response.credential);
+    console.log("GOOGLE SIGN IN RESPONSE:", userObject);
+
+    setIsGoogleLoading(true);
+
+    await axios
+      .post(`http://localhost:8080/api/v1/users/oauth/google`, {
+        fullName: `${userObject?.name}`,
+        email: userObject?.email,
+        password: userObject?.sub,
+      })
+      .then((res) => {
+        console.log("GOOGLE RESPONSE:", res.data);
+        setIsGoogleLoading(false);
+        toast.success(
+          "Authentication successful! Redirecting to your dashboard"
+        );
+
+        localStorage.setItem("token", JSON.stringify(res.data?.token));
+        localStorage.setItem("user", JSON.stringify(res.data?.user));
+
+        Router("/dashboard");
+      })
+      .catch((err) => {
+        console.log("GOOGLE CODE ERROR:", err);
+        if (err?.response?.status == 409) {
+          toast.error(err?.response?.data?.message);
+          setIsGoogleLoading(false);
+        }
+      });
+
+    // TO-DO: Send API request to the DB to sign up user if account does not exist and to log in user
+  }
+
+  // GOOGLE OAUTH
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id:
+        "945407217800-shoebriah98d6s23l0jgan5c1k7cpfdt.apps.googleusercontent.com",
+      ux_mode: "popup",
+      callback: handleCallBackResponse,
+    });
+
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "dark",
+      //   type: "icon",
+      //   size: "large",
+      //   longtitle: false,
+    });
+  }, []);
+
+  // FACEBOOK OAUTH
+  async function loginWithFacebookResolve(response) {
+    console.log("FACEBOOK LOGIN SUCCESS:", response.data);
+
+    await axios
+      .post(`http://localhost:8080/api/v1/users/oauth/facebook`, {
+        fullName: response?.data?.full_name,
+        email: response?.data?.email,
+        password: response?.data?.id,
+      })
+      .then((res) => {
+        console.log("LINKEDIN CODE RESPONSE:", res.data);
+        setIsLoading(false);
+        toast.success(
+          "Authentication successful! Redirecting to your dashboard"
+        );
+
+        localStorage.setItem("token", JSON.stringify(res.data?.token));
+        localStorage.setItem("user", JSON.stringify(res.data?.user));
+
+        Router("/dashboard");
+      })
+      .catch((err) => {
+        console.log("LINKEDIN CODE ERROR:", err);
+        if (err?.response?.status == 409) {
+          toast.error(err?.response?.data?.message);
+          setIsLoading(false);
+        }
+      });
+  }
+  function loginWithFacebookReject(response) {
+    console.log("FACEBOOK LOGIN FAILED:", response);
+  }
+
+  // LINKEDIN OAUTH
+  async function handleLoginWithLinkedIn() {
+    const REDIRECT_URL = "http%3A%2F%2Flocalhost%3A3000";
+    const CLIENT_ID = "77ax1k2mcit2q9";
+    const CLIENT_SECRET = "FNtQyVZ2FQGbCaMN";
+
+    const URL = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&scope=openid profile email&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}`;
+
+    window.open(URL, "_self");
+  }
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const code = searchParams.get("code"); // LinkedIn response
+
+  async function validateLinkedinCode() {
+    if (code) setIsLoading(true);
+
+    await axios
+      .post(`http://localhost:8080/api/v1/users/oauth/linkedin`, {
+        code: code,
+      })
+      .then((res) => {
+        console.log("LINKEDIN CODE RESPONSE:", res.data);
+        setIsLoading(false);
+        toast.success(
+          "Authentication successful! Redirecting to your dashboard"
+        );
+
+        localStorage.setItem("token", JSON.stringify(res.data?.token));
+        localStorage.setItem("user", JSON.stringify(res.data?.user));
+
+        Router("/dashboard");
+      })
+      .catch((err) => {
+        console.log("LINKEDIN CODE ERROR:", err);
+        if (err?.response?.status == 409) {
+          toast.error(err?.response?.data?.message);
+          setIsLoading(false);
+        }
+      });
+  }
+
+  useEffect(() => {
+    if (code) validateLinkedinCode();
+  }, [code]);
+
   return (
     <>
-      <div className="my-10 flex items-center justify-between">
-        <button
-          onClick={() => {}}
-          className="p-2 h-10 w-20 border-clearanceDarkBlue border-[0.7px] rounded-full flex items-center justify-center"
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnHover
+        theme="light"
+      />
+
+      <div className="my-10 flex flex-col justify-between">
+        <div
+          id="signInDiv"
+          style={{
+            display: "inline-block",
+            background: "white",
+            color: "#444",
+            // width: "100%",
+            // borderRadius: "40px",
+            // overflow: "hidden",
+            // border: "thin solid #888",
+            // boxShadow: "1px 1px 1px grey",
+            // whiteSpace: "nowrap",
+          }}
+        ></div>
+
+        <LoginSocialFacebook
+          appId="282477587821953"
+          onResolve={loginWithFacebookResolve}
+          onReject={loginWithFacebookReject}
+          className="text-xs"
         >
           <img
             src={facebookLogo}
             alt="Sign in with Facebook"
-            className="w-[20px] object-contain"
+            className="w-[20px] object-contain relative top-10 left-4"
           />
-        </button>
+          <LoginWithFacebookButton />
+        </LoginSocialFacebook>
+
         <button
-          onClick={() => {}}
-          className="p-2 h-10 w-20 border-clearanceDarkBlue border-[0.7px] rounded-full flex items-center justify-center"
+          onClick={handleLoginWithLinkedIn}
+          className="p-2 h-14 border-clearanceDarkBlue border-[0.7px] gap-x-3 flex items-center justify-center mt-5"
         >
-          <img
-            src={linkedinLogo}
-            alt="Sign in with LinkedIn"
-            className="w-[20px] object-contain"
-          />
-        </button>
-        <button
-          onClick={() => {}}
-          className="p-2 h-10 w-20 border-clearanceDarkBlue border-[0.7px] rounded-full flex items-center justify-center"
-        >
-          <img
-            src={googleLogo}
-            alt="Sign in with Google"
-            className="w-[20px] object-contain"
-          />
+          {!isLoading ? (
+            <>
+              <img
+                src={linkedinLogo}
+                alt="Sign in with Linkedin"
+                className="w-[20px] object-contain"
+              />
+
+              <p>Log in with LinkedIn</p>
+            </>
+          ) : (
+            <FaSpinner className="my-auto mx-auto text-clearanceDarkBlue text-center text-2xl animate-spin" />
+          )}
         </button>
       </div>
-      <form className="flex flex-col mt-14 items-center">
+      <form
+        className="flex flex-col mt-14 items-center"
+        onSubmit={handleSubmit}
+      >
         <div className="w-full relative border-[2px] my-4 bg-transparent border-clearanceDarkBlue flex items-center rounded-full px-5 gap-x-3">
           <label htmlFor="email" className="text-sm inline-block">
             <MdMailOutline size={20} className="text-clearanceDarkBlue" />
@@ -118,10 +311,15 @@ function LoginForm() {
         {/* Action buttons */}
         <div className="w-full mt-4">
           <button
+            type="submit"
             className="h-14 px-7 py-2 w-full rounded-full bg-clearanceDarkBlue text-white"
             onClick={() => {}}
           >
-            Login
+            {isLoading ? (
+              <Dots size={28} color="#FFF" style={{ margin: 0 }} />
+            ) : (
+              "Login"
+            )}
           </button>
           {/* Don't have an account? */}
           <p className="text-center mt-8">

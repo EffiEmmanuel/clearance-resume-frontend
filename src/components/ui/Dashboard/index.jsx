@@ -11,7 +11,8 @@ export const UserContext = createContext();
 
 function Dashboard(props) {
   const [user, setUser] = useState();
-  const [projects, setProjects] = useState();
+  const [folders, setFolders] = useState();
+  const [resumes, setResumes] = useState();
 
   //   Current page
   const [currentPage, setCurrectPage] = useState("home");
@@ -26,48 +27,66 @@ function Dashboard(props) {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   useEffect(() => {
-    async function validateSession() {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        Router("/login");
-        //   setIsLoading(false);
-        return toast.error("You must be logged in.");
+    async function getUser() {
+      const jsonUser = JSON.parse(localStorage.getItem("user"));
+      if (jsonUser) {
+        setUser(jsonUser);
+      } else {
+        Router("/auth/login");
       }
+    }
+    getUser();
+  }, []);
 
+  useEffect(() => {
+    async function getFolders() {
       await axios
-        .post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/users/verifyToken`, {
-          token,
-        })
+        .get(
+          `http://localhost:8080/api/v1/users/folders/get-folders/${user?._id}`
+        )
         .then((res) => {
-          console.log("RESPONSE:", res.data);
-          setIsUserLoggedIn(true);
+          console.log("GET FOLDERS RESPONSE:", res.data);
+          setFolders(res.data?.folders);
           setIsLoading(false);
-          return axios
-            .get(
-              `${process.env.NEXT_PUBLIC_BASE_URL_API}/users/${res.data.data._id}`
-            )
-            .then((res) => {
-              console.log("SECOND RES:", res.data);
-              setUser(res.data.data);
-              setProjects(res.data.data.projects);
-            })
-            .catch((err) => {});
         })
         .catch((err) => {
-          //   toast.error(err.response.data.message);
-          Router("/login");
-          toast.error(
-            "Session expired. Please log in to continue to your dashboard."
-          );
+          console.log("LOGIN ERROR:", err);
           setIsLoading(false);
         });
     }
-    // validateSession();
-  }, []);
+    getFolders();
+  }, [user]);
+
+  useEffect(() => {
+    async function getResumes() {
+      await axios
+        .get(
+          `http://localhost:8080/api/v1/users/resumes/get-resumes/${user?._id}`
+        )
+        .then((res) => {
+          console.log("GET RESUMES RESPONSE:", res.data);
+          setResumes(res.data?.resumes);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log("LOGIN ERROR:", err);
+          setIsLoading(false);
+        });
+    }
+    getResumes();
+  }, [user]);
 
   return (
     <UserContext.Provider
-      value={{ user, projects, setProjects, currentPage, setTheCurrentPage }}
+      value={{
+        user,
+        folders,
+        setFolders,
+        resumes,
+        setResumes,
+        currentPage,
+        setTheCurrentPage,
+      }}
     >
       <ToastContainer />
       <DashboardNavbar

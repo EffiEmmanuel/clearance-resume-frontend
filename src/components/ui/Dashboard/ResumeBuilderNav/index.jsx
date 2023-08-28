@@ -1,5 +1,5 @@
 import { FaBug, FaHeadset, FaHome, FaPlus, FaSignOutAlt } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MdArrowBack, MdChat, MdDashboard, MdPlayLesson } from "react-icons/md";
 import { GiGraduateCap } from "react-icons/gi";
 import { BiBarChartSquare } from "react-icons/bi";
@@ -18,6 +18,9 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
 
   const [isSalesOpen, setIsSalesOpen] = useState(false);
   const [isUploadCenterOpen, setIsUploadCenterOpen] = useState(false);
+
+  const [searcParams, setSearchParams] = useSearchParams();
+  const resumeId = searcParams.get("resumeId");
 
   return (
     <nav
@@ -40,7 +43,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
               }`}
             >
               <Link
-                to="/dashboard/create-resume/template"
+                to={`/dashboard/create-resume/template?resumeId=${resumeId}`}
                 className="flex items-center gap-2"
               >
                 <span className=" text-sm">Template</span>
@@ -52,7 +55,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
               }`}
             >
               <Link
-                to="/dashboard/create-resume/customization"
+                to={`/dashboard/create-resume/customization?resumeId=${resumeId}`}
                 className="flex items-center gap-2"
               >
                 <span className=" text-sm">Customization</span>
@@ -64,7 +67,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
                 links={
                   <>
                     <Link
-                      to="/dashboard/create-resume/advanced/job-description"
+                      to={`/dashboard/create-resume/advanced/job-description?resumeId=${resumeId}`}
                       className={`flex items-center gap-2 ${
                         page == "job-description" &&
                         "text-clearancePink font-semibold"
@@ -73,7 +76,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
                       <span className="text-sm">Job Description</span>
                     </Link>
                     <Link
-                      to="/dashboard/create-resume/advanced/parsing"
+                      to={`/dashboard/create-resume/advanced/parsing?resumeId=${resumeId}`}
                       className={`flex items-center gap-2 mt-6 ${
                         page == "parsing" && "text-clearancePink font-semibold"
                       }`}
@@ -90,7 +93,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
                 links={
                   <>
                     <Link
-                      to="/dashboard/create-resume/informations/personal-details"
+                      to={`/dashboard/create-resume/informations/personal-details?resumeId=${resumeId}`}
                       className={`flex items-center gap-2 ${
                         page == "personal-details" &&
                         "text-clearancePink font-semibold"
@@ -99,7 +102,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
                       <span className="text-sm">Personal Details</span>
                     </Link>
                     <Link
-                      to="/dashboard/create-resume/informations/education"
+                      to={`/dashboard/create-resume/informations/education?resumeId=${resumeId}`}
                       className={`flex items-center gap-2 mt-6 ${
                         page == "education" &&
                         "text-clearancePink font-semibold"
@@ -108,7 +111,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
                       <span className="text-sm">Education</span>
                     </Link>
                     <Link
-                      to="/dashboard/create-resume/informations/work-experience"
+                      to={`/dashboard/create-resume/informations/work-experience?resumeId=${resumeId}`}
                       className={`flex items-center gap-2 mt-6 ${
                         page == "work-experience" &&
                         "text-clearancePink font-semibold"
@@ -117,7 +120,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
                       <span className="text-sm">Work Experience</span>
                     </Link>
                     <Link
-                      to="/dashboard/create-resume/informations/skills"
+                      to={`/dashboard/create-resume/informations/skills?resumeId=${resumeId}`}
                       className={`flex items-center gap-2 mt-6 ${
                         page == "skills" && "text-clearancePink font-semibold"
                       }`}
@@ -125,7 +128,7 @@ export default function ResumeBuilderNav({ isNavHidden, user, page }) {
                       <span className="text-sm">Skills</span>
                     </Link>
                     <Link
-                      to="/dashboard/create-resume/informations/achievements"
+                      to={`/dashboard/create-resume/informations/achievements?resumeId=${resumeId}`}
                       className={`flex items-center gap-2 mt-6 ${
                         page == "achievements" &&
                         "text-clearancePink font-semibold"

@@ -42,6 +42,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="resume-formatting"
             element={
@@ -50,6 +51,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="payment"
             element={
@@ -58,6 +60,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="my-profile"
             element={
@@ -66,6 +69,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="settings"
             element={
@@ -74,6 +78,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="create-resume"
             element={
@@ -82,6 +87,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="create-resume/template"
             element={
@@ -90,6 +96,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="create-resume/customization"
             element={
@@ -108,6 +115,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="create-resume/advanced/parsing"
             element={
@@ -126,6 +134,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* <ProtectedRoute></ProtectedRoute> */}
+
           <Route
             path="create-resume/informations/education"
             element={

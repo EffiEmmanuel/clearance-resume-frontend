@@ -49,3 +49,24 @@
   -webkit-box-shadow: -4px 4px 4px 0px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: -4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
+
+/* width */
+.right-pane::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.right-pane::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.right-pane::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.right-pane::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

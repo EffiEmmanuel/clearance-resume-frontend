@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "../../../../../components/ui/Dashboard";
-import PersonalDetails from "../../../../../components/ui/Dashboard/CreateResume/Informations/PersonalDetails";
+import Achievements from "../../../../../components/ui/Dashboard/CreateResume/Informations/Achievements";
 
 function AchievementsPage() {
   //   Protect Dashboard page
@@ -48,7 +48,7 @@ function AchievementsPage() {
       {isUserLoggedIn && (
         <Dashboard isResumeBuilder={true} page="achievements">
           <div></div>
-          <PersonalDetails />
+          <Achievements />
         </Dashboard>
       )}
     </>
