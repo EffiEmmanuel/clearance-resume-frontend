@@ -36,7 +36,7 @@ function LoginForm() {
     setIsLoading(true);
     // TO-DO: Send API request to server
     await axios
-      .post(`http://localhost:8080/api/v1/users/login`, {
+      .post(`http://3.23.64.240:8080/api/v1/users/login`, {
         email: values.email,
         password: values.password,
       })
@@ -74,7 +74,7 @@ function LoginForm() {
     setIsGoogleLoading(true);
 
     await axios
-      .post(`http://localhost:8080/api/v1/users/oauth/google`, {
+      .post(`http://3.23.64.240:8080/api/v1/users/oauth/google`, {
         fullName: `${userObject?.name}`,
         email: userObject?.email,
         password: userObject?.sub,
@@ -125,7 +125,7 @@ function LoginForm() {
     console.log("FACEBOOK LOGIN SUCCESS:", response.data);
 
     await axios
-      .post(`http://localhost:8080/api/v1/users/oauth/facebook`, {
+      .post(`http://3.23.64.240:8080/api/v1/users/oauth/facebook`, {
         fullName: response?.data?.full_name,
         email: response?.data?.email,
         password: response?.data?.id,
@@ -172,7 +172,7 @@ function LoginForm() {
     if (code) setIsLoading(true);
 
     await axios
-      .post(`http://localhost:8080/api/v1/users/oauth/linkedin`, {
+      .post(`http://3.23.64.240:8080/api/v1/users/oauth/linkedin`, {
         code: code,
       })
       .then((res) => {

@@ -71,7 +71,7 @@ export default function Education() {
     setIsSaving(true);
     await axios
       .post(
-        `http://localhost:8080/api/v1/users/educations/create/${user?._id}/${resumeId}`,
+        `http://3.23.64.240:8080/api/v1/users/educations/create/${user?._id}/${resumeId}`,
         {
           institutionName,
           courseOfStudy,
@@ -106,7 +106,7 @@ export default function Education() {
     setIsSaving(true);
     await axios
       .patch(
-        `http://localhost:8080/api/v1/users/educations/update/${currentEducation?._id}/${resumeId}`,
+        `http://3.23.64.240:8080/api/v1/users/educations/update/${currentEducation?._id}/${resumeId}`,
         {
           institutionName,
           graduationDate,
@@ -146,7 +146,7 @@ export default function Education() {
     console.log("OVER HERE:");
     await axios
       .get(
-        `http://localhost:8080/api/v1/users/resumes/get-resume/${user?._id}/${resumeId}`
+        `http://3.23.64.240:8080/api/v1/users/resumes/get-resume/${user?._id}/${resumeId}`
       )
       .then((res) => {
         console.log("GET RESUME RESPONSE:", res.data);
@@ -178,7 +178,7 @@ export default function Education() {
     console.log("OVER HERE:");
     await axios
       .delete(
-        `http://localhost:8080/api/v1/users/educations/delete/${educationId}/${resumeId}`
+        `http://3.23.64.240:8080/api/v1/users/educations/delete/${educationId}/${resumeId}`
       )
       .then((res) => {
         console.log("DELETE EDUCATION RESPONSE:", res.data);

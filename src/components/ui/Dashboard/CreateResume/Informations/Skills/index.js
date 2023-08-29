@@ -68,7 +68,7 @@ export default function Skills() {
     setIsSaving(true);
     await axios
       .post(
-        `http://localhost:8080/api/v1/users/skills/create/${user?._id}/${resumeId}`,
+        `http://3.23.64.240:8080/api/v1/users/skills/create/${user?._id}/${resumeId}`,
         {
           name: skill,
         }
@@ -95,7 +95,7 @@ export default function Skills() {
     setIsSaving(true);
     await axios
       .patch(
-        `http://localhost:8080/api/v1/users/skills/update/${currentSkill?._id}/${resumeId}`,
+        `http://3.23.64.240:8080/api/v1/users/skills/update/${currentSkill?._id}/${resumeId}`,
         {
           name: skill,
         }
@@ -122,7 +122,7 @@ export default function Skills() {
     console.log("OVER HERE:");
     await axios
       .get(
-        `http://localhost:8080/api/v1/users/resumes/get-resume/${user?._id}/${resumeId}`
+        `http://3.23.64.240:8080/api/v1/users/resumes/get-resume/${user?._id}/${resumeId}`
       )
       .then((res) => {
         console.log("GET RESUME RESPONSE:", res.data);
@@ -155,7 +155,7 @@ export default function Skills() {
     console.log("OVER HERE:");
     await axios
       .delete(
-        `http://localhost:8080/api/v1/users/skills/delete/${skillId}/${resumeId}`
+        `http://3.23.64.240:8080/api/v1/users/skills/delete/${skillId}/${resumeId}`
       )
       .then((res) => {
         console.log("DELETE EXPERIENCE RESPONSE:", res.data);

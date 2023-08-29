@@ -50,7 +50,7 @@ export default function Template() {
     console.log("OVER HERE:");
     await axios
       .get(
-        `http://localhost:8080/api/v1/users/resumes/get-resume/${user?._id}/${resumeId}`
+        `http://3.23.64.240:8080/api/v1/users/resumes/get-resume/${user?._id}/${resumeId}`
       )
       .then((res) => {
         console.log("GET RESUME RESPONSE:", res.data);

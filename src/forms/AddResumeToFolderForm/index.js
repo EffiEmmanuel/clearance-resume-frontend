@@ -23,7 +23,7 @@ export default function AddResumeToFolderForm(props) {
     // Send API request here
     axios
       .patch(
-        `http://localhost:8080/api/v1/users/folders/add-resume/${folderPicked}/${props?.resume?._id}/${user?._id}`
+        `http://3.23.64.240:8080/api/v1/users/folders/add-resume/${folderPicked}/${props?.resume?._id}/${user?._id}`
       )
       .then((res) => {
         console.log("RESPONSE;", res.data);

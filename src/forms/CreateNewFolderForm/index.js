@@ -18,9 +18,12 @@ export default function CreateNewFolderForm(props) {
     setIsLoading(true);
     // Send API request here
     axios
-      .post(`http://localhost:8080/api/v1/users/folders/create/${user?._id}`, {
-        folderName: values?.name,
-      })
+      .post(
+        `http://3.23.64.240:8080/api/v1/users/folders/create/${user?._id}`,
+        {
+          folderName: values?.name,
+        }
+      )
       .then((res) => {
         console.log("RESPONSE;", res.data);
         toast.success("Folder created successfully!");

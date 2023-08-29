@@ -68,7 +68,7 @@ export default function Achievements() {
     setIsSaving(true);
     await axios
       .post(
-        `http://localhost:8080/api/v1/users/achievements/create/${user?._id}/${resumeId}`,
+        `http://3.23.64.240:8080/api/v1/users/achievements/create/${user?._id}/${resumeId}`,
         {
           title: achievement,
           reason: reason,
@@ -97,7 +97,7 @@ export default function Achievements() {
     setIsSaving(true);
     await axios
       .patch(
-        `http://localhost:8080/api/v1/users/achievements/update/${currentAchievement?._id}/${resumeId}`,
+        `http://3.23.64.240:8080/api/v1/users/achievements/update/${currentAchievement?._id}/${resumeId}`,
         {
           title: achievement,
           reason: reason,
@@ -128,7 +128,7 @@ export default function Achievements() {
     console.log("OVER HERE:");
     await axios
       .get(
-        `http://localhost:8080/api/v1/users/resumes/get-resume/${user?._id}/${resumeId}`
+        `http://3.23.64.240:8080/api/v1/users/resumes/get-resume/${user?._id}/${resumeId}`
       )
       .then((res) => {
         console.log("GET RESUME RESPONSE:", res.data);
@@ -161,7 +161,7 @@ export default function Achievements() {
     console.log("OVER HERE:");
     await axios
       .delete(
-        `http://localhost:8080/api/v1/users/achievements/delete/${skillId}/${resumeId}`
+        `http://3.23.64.240:8080/api/v1/users/achievements/delete/${skillId}/${resumeId}`
       )
       .then((res) => {
         console.log("DELETE EXPERIENCE RESPONSE:", res.data);

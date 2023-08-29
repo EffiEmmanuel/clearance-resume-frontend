@@ -21,9 +21,12 @@ export default function CreateNewResumeForm(props) {
     setIsLoading(true);
     // Send API request here
     axios
-      .post(`http://localhost:8080/api/v1/users/resumes/create/${user?._id}`, {
-        name: values?.name,
-      })
+      .post(
+        `http://3.23.64.240:8080/api/v1/users/resumes/create/${user?._id}`,
+        {
+          name: values?.name,
+        }
+      )
       .then((res) => {
         console.log("CREATE RESUME RESPONSE:", res.data);
         toast.success("Resume created successfully!");

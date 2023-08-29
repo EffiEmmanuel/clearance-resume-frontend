@@ -35,7 +35,7 @@ export default function DashboardHome() {
     // TO-DO: Send API request to server
     await axios
       .get(
-        `http://localhost:8080/api/v1/users/folders/get-folder/${folderId}/${user?._id}`
+        `http://3.23.64.240:8080/api/v1/users/folders/get-folder/${folderId}/${user?._id}`
       )
       .then((res) => {
         console.log("GET FOLDER RESPONSE:", res.data);
@@ -54,7 +54,7 @@ export default function DashboardHome() {
     // TO-DO: Send API request to server
     await axios
       .get(
-        `http://localhost:8080/api/v1/users/resumes/get-resumes/${user?._id}`
+        `http://3.23.64.240:8080/api/v1/users/resumes/get-resumes/${user?._id}`
       )
       .then((res) => {
         console.log("GET RESUMES RESPONSE:", res.data);
@@ -75,7 +75,7 @@ export default function DashboardHome() {
       setIsFoldersLoading(true);
       await axios
         .get(
-          `http://localhost:8080/api/v1/users/folders/get-folders/${user?._id}`
+          `http://3.23.64.240:8080/api/v1/users/folders/get-folders/${user?._id}`
         )
         .then((res) => {
           console.log("GET FOLDERS RESPONSE:", res.data);
@@ -105,7 +105,7 @@ export default function DashboardHome() {
     // Send API request here
     axios
       .delete(
-        `http://localhost:8080/api/v1/users/resumes/delete/${user?._id}/${resumeId}`
+        `http://3.23.64.240:8080/api/v1/users/resumes/delete/${user?._id}/${resumeId}`
       )
       .then((res) => {
         console.log("RESPONSE;", res.data);
